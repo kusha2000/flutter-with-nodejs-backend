@@ -22,4 +22,13 @@ class UserProvider with ChangeNotifier {
     }
   }
 
+  Future<void> addUser(User user) async {
+    try {
+      await _userService.createUser(user);
+      _users.add(user);
+      notifyListeners(); // Notify listeners after adding the user
+    } catch (error) {
+      print('Failed to add user: $error');
+    }
+  }
 }

@@ -20,4 +20,39 @@ class UserService {
       rethrow;
     }
   }
+
+  Future<User> getUser(String id) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl/$id'));
+      if (response.statusCode == 200) {
+        return User.fromJson(json.decode(response.body));
+      } else {
+        print('Failed to load user: ${response.statusCode}');
+        throw Exception('Failed to load user');
+      }
+    } catch (e) {
+      print('Error fetching user: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> createUser(User user) async {
+    try {
+      final response = await http.post(
+        Uri.parse(baseUrl),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: json.encode(user.toJson()),
+      );
+      if (response.statusCode != 201) {
+        print('Failed to create user: ${response.statusCode}');
+        throw Exception('Failed to create user');
+      }
+    } catch (e) {
+      print('Error creating user: $e');
+      rethrow;
+    }
+  }
+
 }
