@@ -55,4 +55,35 @@ class UserService {
     }
   }
 
+  Future<void> updateUser(User user) async {
+    try {
+      final response = await http.put(
+        Uri.parse('$baseUrl/${user.id}'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: json.encode(user.toJson()),
+      );
+      if (response.statusCode != 200) {
+        print('Failed to update user: ${response.statusCode}');
+        throw Exception('Failed to update user');
+      }
+    } catch (e) {
+      print('Error updating user: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> deleteUser(String id) async {
+    try {
+      final response = await http.delete(Uri.parse('$baseUrl/$id'));
+      if (response.statusCode != 200) {
+        print('Failed to delete user: ${response.statusCode}');
+        throw Exception('Failed to delete user');
+      }
+    } catch (e) {
+      print('Error deleting user: $e');
+      rethrow;
+    }
+  }
 }
